@@ -6,8 +6,8 @@ class Line {
         }
         this.show = function() {
             push();
-            stroke(255); // 線の色指定
-            strokeWeight(2); // 線の太さ指定
+            stroke(255);
+            strokeWeight(2);
             line(prevX, prevY, currentX, currentY);
             pop();
         }
@@ -26,7 +26,7 @@ class Circle {
 
         this.isOffScreen = function () {
             var pos = this.body.position;
-            if (pos.x < 0 || pos.x > windowWidth || pos.y > windowHeight) {
+            if (pos.y > windowHeight) {
                 return true;
             } else {
                 return false;
@@ -61,7 +61,7 @@ class Box {
 
         this.isOffScreen = function () {
             var pos = this.body.position;
-            if (pos.x < 0 || pos.x > windowWidth || pos.y > windowHeight) {
+            if (pos.y > windowHeight) {
                 return true;
             } else {
                 return false;

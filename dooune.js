@@ -65,7 +65,12 @@ function mouseReleased() {
     if (lines.length > 0) {
         if (dist(lines[0].pos.x, lines[0].pos.y, lines[lines.length - 1].pos.x, lines[lines.length - 1].pos.y) < 50) {
             center = getCenter(lines);
-            objects.push(new Circle(center.x, center.y, getRadius(lines)));
+            corner = countCorner(lines);
+            if (corner == 3) {
+                objects.push(new Box(center.x, center.y, getRadius(lines), getRadius(lines)));
+            } else {
+                objects.push(new Circle(center.x, center.y, getRadius(lines)));
+            }
         }
         lines = [];
     }
