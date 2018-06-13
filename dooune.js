@@ -18,16 +18,31 @@ var ground;
 
 var mConstraint;
 
-var synth;
+var sine, square;
 function preload() {
-    synth = new Tone.PolySynth({
+    sine = new Tone.PolySynth({
         "oscillator" : {
-            "type" : "sine"
+            type: 'triangle8',
+            partials: [0, 2, 3, 4],
+            harmonicity: 3.4
+        },
+        "filter": {
+           "type": "highpass"
+        },
+    }).toMaster();
+    sine.volume.value = -10;
+    square = new Tone.PolySynth({
+        "oscillator" : {
+            type : 'fmsquare',
+            modulationType : 'sawtooth',
+            modulationIndex : 3,
+            harmonicity: 3.4
         },
         "envelope" : {
             "attack" : 0.1
         }
-    }).toMaster();  
+    }).toMaster();
+    square.volume.value = -10;
 }
 
 function setup() {
@@ -61,14 +76,14 @@ function setup() {
         var pairs = event.pairs;
         for (var i = 0; i < pairs.length; i++) {
             var pair = pairs[i];
-            if ("updateTime" in pair.bodyA && millis() - pair.bodyA.updateTime > 200) {
-                synth.triggerAttackRelease(pair.bodyA.chord, "8n");
+            if ("updateTime" in pair.bodyA && millis() - pair.bodyA.updateTime > 300) {
+                pair.bodyA.sound.triggerAttackRelease(pair.bodyA.chord, "8n");
                 pair.bodyA.render.fillStyle = random(original);
                 pair.bodyA.originColor = pair.bodyA.render.fillStyle;
                 pair.bodyA.updateTime = millis();
             }
-            if ("updateTime" in pair.bodyB && millis() - pair.bodyB.updateTime > 200) {
-                synth.triggerAttackRelease(pair.bodyB.chord, "8n");
+            if ("updateTime" in pair.bodyB && millis() - pair.bodyB.updateTime > 300) {
+                pair.bodyB.sound.triggerAttackRelease(pair.bodyB.chord, "8n");
                 pair.bodyB.render.fillStyle = random(original);
                 pair.bodyB.originColor = pair.bodyB.render.fillStyle;
                 pair.bodyB.updateTime = millis();

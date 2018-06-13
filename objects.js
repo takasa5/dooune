@@ -1,7 +1,9 @@
 var scribble = new Scribble();
 var chords = [["C4", "E4", "G4"], ["D4", "F4", "A5"], ["E4", "G4", "B5"],
               ["F4", "A5", "C5"], ["G4", "B5", "D5"], ["A5", "C5", "E5"]];
+var notes = ["C4", "D4", "E4", "F4", "G4", "A5", "B5"];
 chords = chords.reverse();
+notes = notes.reverse();
 
 class Line {
     constructor(prevX, prevY, currentX, currentY) {
@@ -30,7 +32,8 @@ class Circle {
         this.body.render.fillStyle = "white";
         this.body.originColor = "white";
         this.body.updateTime = 0;
-        this.body.chord = getChord(r);
+        this.body.chord = getChord(r, chords);
+        this.body.sound = sine;
         this.r = r;
         World.add(world, this.body);
 
@@ -85,7 +88,8 @@ class Box {
         this.body.updateTime = 0;
         this.w = w;
         this.h = h;
-        this.body.chord = getChord(w);
+        this.body.chord = getChord(w, notes);
+        this.body.sound = square;
         World.add(world, this.body);
         
         this.isOffScreen = function () {

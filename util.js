@@ -43,13 +43,13 @@ function countCorner(lines) {
     return interiorAng;
 }
 
-function getChord(size) {
+function getChord(size, list) {
     var interval = 20;
     var min = 20;
-    for (var i = 0; i < chords.length; i++) {
+    for (var i = 0; i < list.length; i++) {
         if (size < min + interval * i) {
-            return chords[i];
+            return list[i];
         }
     }
-    return chords[chords.length - 1];
+    return list[list.length - 1];
 }
