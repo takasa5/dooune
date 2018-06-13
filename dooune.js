@@ -18,6 +18,18 @@ var ground;
 
 var mConstraint;
 
+var synth;
+function preload() {
+    synth = new Tone.PolySynth({
+        "oscillator" : {
+            "type" : "sine"
+        },
+        "envelope" : {
+            "attack" : 0.1
+        }
+    }).toMaster();  
+}
+
 function setup() {
     var scroll_event = 'onwheel' in document ? 'wheel' : 'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll';
     $(document).on(scroll_event,function(e){e.preventDefault();});
@@ -50,11 +62,13 @@ function setup() {
         for (var i = 0; i < pairs.length; i++) {
             var pair = pairs[i];
             if ("updateTime" in pair.bodyA && millis() - pair.bodyA.updateTime > 200) {
+                synth.triggerAttackRelease(pair.bodyA.chord, "8n");
                 pair.bodyA.render.fillStyle = random(original);
                 pair.bodyA.originColor = pair.bodyA.render.fillStyle;
                 pair.bodyA.updateTime = millis();
             }
             if ("updateTime" in pair.bodyB && millis() - pair.bodyB.updateTime > 200) {
+                synth.triggerAttackRelease(pair.bodyB.chord, "8n");
                 pair.bodyB.render.fillStyle = random(original);
                 pair.bodyB.originColor = pair.bodyB.render.fillStyle;
                 pair.bodyB.updateTime = millis();
@@ -109,12 +123,17 @@ function windowResized() {
         isStatic: true
     }
     World.remove(world, ground);
-    ground = Bodies.rectangle(windowWidth / 2, windowHeight, windowWidth, 10, options)
+    ground = Bodies.rectangle(windowWidth / 2, windowHeight, windowWidth, 100, options)
     World.add(world, ground);
 }
 
 function draw() {
     background(51);
+    if (keyIsDown(32)/*SPACE*/) {
+        world.gravity.scale = 0.0001;
+    } else {
+        world.gravity.scale = 0.001;
+    }
     for (var i = 0; i < objects.length; i++) {
         objects[i].show();
         if (objects[i].isOffScreen()) {
@@ -126,5 +145,4 @@ function draw() {
     for (var i = 0; i < lines.length; i++) {
         lines[i].show();
     }
-
 }

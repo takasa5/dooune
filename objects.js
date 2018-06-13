@@ -1,3 +1,8 @@
+var scribble = new Scribble();
+var chords = [["C4", "E4", "G4"], ["D4", "F4", "A5"], ["E4", "G4", "B5"],
+              ["F4", "A5", "C5"], ["G4", "B5", "D5"], ["A5", "C5", "E5"]];
+chords = chords.reverse();
+
 class Line {
     constructor(prevX, prevY, currentX, currentY) {
         this.pos = {
@@ -8,7 +13,8 @@ class Line {
             push();
             stroke(255);
             strokeWeight(2);
-            line(prevX, prevY, currentX, currentY);
+            scribble.scribbleLine(prevX, prevY, currentX, currentY);
+            //line(prevX, prevY, currentX, currentY);
             pop();
         }
     };
@@ -24,6 +30,7 @@ class Circle {
         this.body.render.fillStyle = "white";
         this.body.originColor = "white";
         this.body.updateTime = 0;
+        this.body.chord = getChord(r);
         this.r = r;
         World.add(world, this.body);
 
@@ -78,8 +85,9 @@ class Box {
         this.body.updateTime = 0;
         this.w = w;
         this.h = h;
+        this.body.chord = getChord(w);
         World.add(world, this.body);
-
+        
         this.isOffScreen = function () {
             var pos = this.body.position;
             if (pos.y > windowHeight) {

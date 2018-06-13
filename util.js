@@ -42,3 +42,14 @@ function countCorner(lines) {
     }
     return interiorAng;
 }
+
+function getChord(size) {
+    var interval = 20;
+    var min = 20;
+    for (var i = 0; i < chords.length; i++) {
+        if (size < min + interval * i) {
+            return chords[i];
+        }
+    }
+    return chords[chords.length - 1];
+}
