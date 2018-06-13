@@ -3,11 +3,14 @@ var Engine = Matter.Engine,
     World = Matter.World,
     Bodies = Matter.Bodies,
     Mouse = Matter.Mouse,
-    MouseConstraint = Matter.MouseConstraint;
+    MouseConstraint = Matter.MouseConstraint,
+    Detector = Matter.Detector,
+    Events = Matter.Events;
 
 var engine;
 var world;
 
+var original = ["#ffc800", "#19ffdc", "#cc14cc"];
 var objects = [];
 var lines = [];
 
@@ -23,7 +26,9 @@ function setup() {
     document.body.style.overflow = "hidden";
 
     var canvas = createCanvas(windowWidth*0.99, windowHeight*0.99);
-    engine = Engine.create();
+    engine = Engine.create({
+        enableSleeping: true
+    });
     world = engine.world;
     Engine.run(engine);
     var options = {
@@ -39,6 +44,25 @@ function setup() {
     }
     mConstraint = MouseConstraint.create(engine, options);
     World.add(world, mConstraint);
+
+    Events.on(engine, "collisionStart", function(event) {
+        var pairs = event.pairs;
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i];
+            if ("updateTime" in pair.bodyA && millis() - pair.bodyA.updateTime > 200) {
+                pair.bodyA.render.fillStyle = random(original);
+                pair.bodyA.originColor = pair.bodyA.render.fillStyle;
+                pair.bodyA.updateTime = millis();
+            }
+            if ("updateTime" in pair.bodyB && millis() - pair.bodyB.updateTime > 200) {
+                pair.bodyB.render.fillStyle = random(original);
+                pair.bodyB.originColor = pair.bodyB.render.fillStyle;
+                pair.bodyB.updateTime = millis();
+            }
+        }
+    });
+    Events.on(engine, "collisionEnd", function(event) {
+    });
 }
 
 function mousePressed() {
@@ -65,10 +89,11 @@ function mouseReleased() {
     if (lines.length > 0) {
         if (dist(lines[0].pos.x, lines[0].pos.y, lines[lines.length - 1].pos.x, lines[lines.length - 1].pos.y) < 50) {
             center = getCenter(lines);
-            corner = countCorner(lines);
-            if (corner == 3) {
+            ang = countCorner(lines);
+            console.log(ang);
+            if (ang > 300) {
                 objects.push(new Box(center.x, center.y, getRadius(lines), getRadius(lines)));
-            } else {
+            } else if (ang <= 300) {
                 objects.push(new Circle(center.x, center.y, getRadius(lines)));
             }
         }

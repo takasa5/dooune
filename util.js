@@ -37,10 +37,8 @@ function countCorner(lines) {
         if (abs(theta - 90) < 30)
             corner++;
         if (theta < 150) {
-            console.log(theta);
             interiorAng += theta;
         }
     }
-    console.log("corner:" + corner);
-    return corner;
+    return interiorAng;
 }

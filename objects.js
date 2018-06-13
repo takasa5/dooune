@@ -18,9 +18,12 @@ class Circle {
     constructor(x, y, r) {
         var options = {
             friction: 0.6,
-            restitution: 0.7
+            restitution: 1
         };
         this.body = Bodies.circle(x, y, r, options);
+        this.body.render.fillStyle = "white";
+        this.body.originColor = "white";
+        this.body.updateTime = 0;
         this.r = r;
         World.add(world, this.body);
 
@@ -40,6 +43,21 @@ class Circle {
         this.show = function () {
             var pos = this.body.position;
             push();
+            if (this.body.render.fillStyle != "white") {
+                var cl = color(this.body.render.fillStyle);
+                var now = millis();
+                var r = int(red(cl) + (now - this.body.updateTime) * (255 - red(color(this.body.originColor))) / 500);
+                var g = int(green(cl) + (now - this.body.updateTime) * (255 - green(color(this.body.originColor))) / 500);
+                var b = int(blue(cl) + (now - this.body.updateTime) * (255 - blue(color(this.body.originColor))) / 500);
+                if (r >= 255 && g >= 255 && b >= 255) {
+                    this.body.render.fillStyle = "white";
+                    fill(this.body.render.fillStyle);
+                } else {
+                    fill(color(r, g, b));
+                }
+            } else {
+                fill(this.body.render.fillStyle);                
+            }
             ellipseMode(RADIUS);
             translate(pos.x, pos.y);
             ellipse(0, 0, this.r);
@@ -55,6 +73,9 @@ class Box {
             restitution: 0.5
         };
         this.body = Bodies.rectangle(x, y, w, h, options);
+        this.body.render.fillStyle = "white";
+        this.body.originColor = "white";
+        this.body.updateTime = 0;
         this.w = w;
         this.h = h;
         World.add(world, this.body);
@@ -76,6 +97,21 @@ class Box {
             var pos = this.body.position;
             var angle = this.body.angle;
             push();
+            if (this.body.render.fillStyle != "white") {
+                var cl = color(this.body.render.fillStyle);
+                var now = millis();
+                var r = int(red(cl) + (now - this.body.updateTime) * (255 - red(color(this.body.originColor))) / 500);
+                var g = int(green(cl) + (now - this.body.updateTime) * (255 - green(color(this.body.originColor))) / 500);
+                var b = int(blue(cl) + (now - this.body.updateTime) * (255 - blue(color(this.body.originColor))) / 500);
+                if (r >= 255 && g >= 255 && b >= 255) {
+                    this.body.render.fillStyle = "white";
+                    fill(this.body.render.fillStyle);
+                } else {
+                    fill(color(r, g, b));
+                }
+            } else {
+                fill(this.body.render.fillStyle);                
+            }
             translate(pos.x, pos.y);
             rotate(angle);
             rectMode(CENTER);
