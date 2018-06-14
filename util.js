@@ -53,3 +53,16 @@ function getChord(size, list) {
     }
     return list[list.length - 1];
 }
+
+function drawBG() {
+    var prevY = windowHeight - 20;
+    for (var i = 0; i < windowWidth; i += 3) {
+        nextY = 100 * Math.sin(i) + windowHeight - 20;
+        push();
+        stroke(0);
+        strokeWeight(2);
+        line(i-1, prevY, i, nextY);
+        pop();
+        prevY = nextY;
+    }
+}

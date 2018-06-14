@@ -19,6 +19,24 @@ var ground;
 var mConstraint;
 
 var sine, square;
+
+var back = function(p) {
+    p.setup = function() {
+        canv = p.createCanvas(windowWidth, windowHeight);
+        canv.style("z-index", -1);
+        canv.position(0, 0);
+        p.background(61);
+    };
+    p.windowResized = function() {
+        p.resizeCanvas(windowWidth, windowHeight);
+        p.background(61);
+    }
+    p.draw = function() {
+    };
+}
+
+var instanceMode = new p5(back);
+
 function preload() {
     sine = new Tone.PolySynth({
         "oscillator" : {
@@ -30,7 +48,7 @@ function preload() {
            "type": "highpass"
         },
     }).toMaster();
-    sine.volume.value = -10;
+    sine.volume.value = -30;
     square = new Tone.PolySynth({
         "oscillator" : {
             type : 'fmsquare',
@@ -42,7 +60,7 @@ function preload() {
             "attack" : 0.1
         }
     }).toMaster();
-    square.volume.value = -10;
+    square.volume.value = -30;
 }
 
 function setup() {
@@ -52,7 +70,8 @@ function setup() {
     $(document).on('touchmove.noScroll', function(e) {e.preventDefault();});
     document.body.style.overflow = "hidden";
 
-    var canvas = createCanvas(windowWidth*0.99, windowHeight*0.99);
+    var canvas = createCanvas(windowWidth, windowHeight);
+    canvas.position(0, 0);
     engine = Engine.create({
         enableSleeping: true
     });
@@ -61,7 +80,7 @@ function setup() {
     var options = {
         isStatic: true
     }
-    ground = Bodies.rectangle(windowWidth / 2, windowHeight*0.99, windowWidth*0.99, 10, options)
+    ground = Bodies.rectangle(windowWidth / 2, windowHeight, windowWidth, 20, options)
     World.add(world, ground);
 
     var canvasmouse = Mouse.create(canvas.elt);
@@ -138,12 +157,13 @@ function windowResized() {
         isStatic: true
     }
     World.remove(world, ground);
-    ground = Bodies.rectangle(windowWidth / 2, windowHeight, windowWidth, 100, options)
+    ground = Bodies.rectangle(windowWidth / 2, windowHeight, windowWidth, 20, options)
     World.add(world, ground);
 }
 
 function draw() {
-    background(51);
+    clear();
+    //drawBG();
     if (keyIsDown(32)/*SPACE*/) {
         world.gravity.scale = 0.0001;
     } else {

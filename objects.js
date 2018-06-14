@@ -13,7 +13,7 @@ class Line {
         }
         this.show = function() {
             push();
-            stroke(255);
+            stroke(51);
             strokeWeight(2);
             scribble.scribbleLine(prevX, prevY, currentX, currentY);
             //line(prevX, prevY, currentX, currentY);
