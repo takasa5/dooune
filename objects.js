@@ -22,6 +22,7 @@ class Line {
     };
 }
 
+
 class Circle {
     constructor(x, y, r) {
         var options = {
@@ -47,6 +48,7 @@ class Circle {
         }
 
         this.removeFromWorld = function () {
+            this.body.sound.triggerRelease(this.body.chord);
             World.remove(world, this.body);
         }
 
@@ -62,6 +64,7 @@ class Circle {
                 if (r >= 255 && g >= 255 && b >= 255) {
                     this.body.render.fillStyle = "white";
                     fill(this.body.render.fillStyle);
+                    this.body.sound.triggerRelease(this.body.chord);
                 } else {
                     fill(color(r, g, b));
                 }
@@ -102,6 +105,7 @@ class Box {
         }
 
         this.removeFromWorld = function () {
+            this.body.sound.triggerRelease(this.body.chord);
             World.remove(world, this.body);
         }
 
@@ -118,6 +122,7 @@ class Box {
                 if (r >= 255 && g >= 255 && b >= 255) {
                     this.body.render.fillStyle = "white";
                     fill(this.body.render.fillStyle);
+                    this.body.sound.triggerRelease(this.body.chord);
                 } else {
                     fill(color(r, g, b));
                 }

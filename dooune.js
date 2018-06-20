@@ -20,44 +20,27 @@ var mConstraint;
 
 var sine, square;
 
-var back = function(p) {
-    p.setup = function() {
-        canv = p.createCanvas(windowWidth, windowHeight);
-        canv.style("z-index", -1);
-        canv.position(0, 0);
-        p.background(61);
-    };
-    p.windowResized = function() {
-        p.resizeCanvas(windowWidth, windowHeight);
-        p.background(61);
-    }
-    p.draw = function() {
-    };
-}
-
-var instanceMode = new p5(back);
-
 function preload() {
     sine = new Tone.PolySynth({
         "oscillator" : {
-            type: 'triangle8',
+            type: 'sine',
             partials: [0, 2, 3, 4],
             harmonicity: 3.4
         },
         "filter": {
-           "type": "highpass"
+           "type": "lowpass"
         },
     }).toMaster();
     sine.volume.value = -30;
     square = new Tone.PolySynth({
         "oscillator" : {
-            type : 'fmsquare',
+            type : 'sawtooth',
             modulationType : 'sawtooth',
             modulationIndex : 3,
             harmonicity: 3.4
         },
         "envelope" : {
-            "attack" : 0.1
+            "attack" : 1
         }
     }).toMaster();
     square.volume.value = -30;
@@ -95,18 +78,16 @@ function setup() {
         var pairs = event.pairs;
         for (var i = 0; i < pairs.length; i++) {
             var pair = pairs[i];
-            if ("updateTime" in pair.bodyA && millis() - pair.bodyA.updateTime > 300) {
-                pair.bodyA.sound.triggerAttackRelease(pair.bodyA.chord, "8n");
-                pair.bodyA.render.fillStyle = random(original);
-                pair.bodyA.originColor = pair.bodyA.render.fillStyle;
-                pair.bodyA.updateTime = millis();
-            }
-            if ("updateTime" in pair.bodyB && millis() - pair.bodyB.updateTime > 300) {
-                pair.bodyB.sound.triggerAttackRelease(pair.bodyB.chord, "8n");
-                pair.bodyB.render.fillStyle = random(original);
-                pair.bodyB.originColor = pair.bodyB.render.fillStyle;
-                pair.bodyB.updateTime = millis();
-            }
+            var bodyName = ["bodyA", "bodyB"];
+            for (var j = 0; j < bodyName.length; j++)
+                if ("updateTime" in pair[bodyName[j]] && millis() - pair[bodyName[j]].updateTime > 300) {
+                    var targetBody = pair[bodyName[j]];
+                    //pair.bodyA.sound.triggerAttackRelease(pair.bodyA.chord, "8n");
+                    targetBody.sound.triggerAttack(targetBody.chord);
+                    targetBody.render.fillStyle = random(original);
+                    targetBody.originColor = targetBody.render.fillStyle;
+                    targetBody.updateTime = millis();
+                }
         }
     });
     Events.on(engine, "collisionEnd", function(event) {
