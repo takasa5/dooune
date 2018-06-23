@@ -33,7 +33,7 @@ class Circle {
         this.body.render.fillStyle = "white";
         this.body.originColor = "white";
         this.body.updateTime = 0;
-        this.body.chord = getChord(r, chords);
+        this.body.chord = getChord(r, notes);
         this.body.sound = sine;
         this.r = r;
         World.add(world, this.body);

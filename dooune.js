@@ -31,19 +31,9 @@ function preload() {
            "type": "lowpass"
         },
     }).toMaster();
-    sine.volume.value = -30;
-    square = new Tone.PolySynth({
-        "oscillator" : {
-            type : 'sawtooth',
-            modulationType : 'sawtooth',
-            modulationIndex : 3,
-            harmonicity: 3.4
-        },
-        "envelope" : {
-            "attack" : 1
-        }
-    }).toMaster();
-    square.volume.value = -30;
+    sine.volume.value = -40;
+    square = new Tone.PolySynth(4, Tone.AMSynth).toMaster();
+    square.volume.value = -10;
 }
 
 function setup() {
@@ -83,7 +73,8 @@ function setup() {
                 if ("updateTime" in pair[bodyName[j]] && millis() - pair[bodyName[j]].updateTime > 300) {
                     var targetBody = pair[bodyName[j]];
                     //pair.bodyA.sound.triggerAttackRelease(pair.bodyA.chord, "8n");
-                    targetBody.sound.triggerAttack(targetBody.chord);
+                    if (targetBody.render.fillStyle == "white")
+                        targetBody.sound.triggerAttack(targetBody.chord);
                     targetBody.render.fillStyle = random(original);
                     targetBody.originColor = targetBody.render.fillStyle;
                     targetBody.updateTime = millis();
